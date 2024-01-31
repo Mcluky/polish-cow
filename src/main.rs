@@ -155,11 +155,11 @@ fn main() {
             }
             AnimationState::Roatation => {
                 transform_matrix.rotation.z = -1.5;
-                transform_matrix.rotation.x += 0.2;
+                transform_matrix.rotation.x += 0.15;
                 // if the cow has fully rotated we need to modulo the rotation
                 transform_matrix.rotation.x %= 6.28;
                 counter += 1;
-                if counter > 62 {
+                if counter > 80 {
                     animation_state = AnimationState::LeftWhippingDown;
                     counter = 0;
                 }
