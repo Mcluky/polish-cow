@@ -17,8 +17,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Install necessary sound libraries
-      run: apt-get update && apt-get -y install libasound2-dev
+    - name: Install necessary libraries
+      run: |
+        apt-get update
+        apt-get -y install libasound2-devmingw-w64
 
     - name: Build production release for various platforms
       run: |
