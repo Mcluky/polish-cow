@@ -12,6 +12,19 @@ use gemini_engine::{
 use rodio::{source::Source, Decoder, OutputStream};
 use std::io::Cursor;
 use stl_io::IndexedMesh;
+use clap::Parser;
+
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    /// If no music should be played (true) or not (false, default)
+    #[arg(short, long, default_value_t = false)]
+    no_sound: bool,
+
+    /// If cow should only rotate (true) or also whip (false, default)
+    #[arg(short, long, default_value_t = false)]
+    rotate_only: bool,
+}
 
 const FPS: f32 = 30.0;
 const ANIMATION_SPEED: f64 = 0.2 ;
@@ -19,7 +32,7 @@ const ANIMATION_REACHED_THRESHOLD: f64 = 0.01;
 
 fn main() {
     // get environment variables
-    let args: Vec<String> = std::env::args().collect();
+    let args = Args::parse();
 
     // Embed the 3d cow file into the binary
     let stl_bytes = include_bytes!("../resources/lowpolycow.stl");
@@ -32,11 +45,9 @@ fn main() {
     let song_bytes = include_bytes!("../resources/polish-cow-song.mp3");
     // create a cursor to read the song from
     let song_cursor = Cursor::new(song_bytes);
-    // check if the user has set no-sound as an argument
-    let no_sound = args.len() > 1 && args[1] == "no-sound";
     // initialize the audio stream
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
-    if !no_sound {
+    if !args.no_sound {
         // create a decoder to decode the song
         let source = Decoder::new_looped(song_cursor).unwrap();
         // play the song
@@ -156,12 +167,14 @@ fn main() {
             AnimationState::Roatation => {
                 transform_matrix.rotation.z = -1.5;
                 transform_matrix.rotation.x += 0.15;
-                // if the cow has fully rotated we need to modulo the rotation
-                transform_matrix.rotation.x %= 6.28;
-                counter += 1;
-                if counter > 80 {
-                    animation_state = AnimationState::LeftWhippingDown;
-                    counter = 0;
+                if !args.rotate_only {
+                    // if the cow has fully rotated we need to modulo the rotation
+                    transform_matrix.rotation.x %= 6.28;
+                    counter += 1;
+                    if counter > 80 {
+                        animation_state = AnimationState::LeftWhippingDown;
+                        counter = 0;
+                    }
                 }
             }
         }
