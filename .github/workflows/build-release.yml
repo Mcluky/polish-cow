@@ -20,7 +20,7 @@ jobs:
     - name: Install necessary libraries
       run: |
         apt-get update
-        apt-get -y install libasound2-dev mingw-w64
+        apt-get -y install libasound2-dev mingw-w64 libclang-dev
 
     - name: Build production release for various platforms
       run: |
