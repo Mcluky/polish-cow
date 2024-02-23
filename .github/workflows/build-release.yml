@@ -64,5 +64,4 @@ jobs:
           target/i686-pc-windows-gnu/release/polish-cow.exe
           target/aarch64-unknown-linux-gnu/release/polish-cow
           target/aarch64-apple-darwin/release/polish-cow
-          target/aarch64-pc-windows-gnu/release/polish-cow.exe
           target/riscv64gc-unknown-linux-gnu/release/polish-cow
