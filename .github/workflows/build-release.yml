@@ -34,20 +34,18 @@ jobs:
         # ARM 64bit architectures
         rustup target add aarch64-unknown-linux-gnu
         rustup target add aarch64-apple-darwin
-        rustup target add aarch64-pc-windows-gnu
 
         # RISC-V 64bit architectures
         rustup target add riscv64gc-unknown-linux-gnu
 
         # Build the release
         cargo build --release --target x86_64-unknown-linux-gnu
-        cargo build --release --target x86_64-pc-windows-msvc
+        cargo build --release --target x86_64-pc-windows-gnu
         cargo build --release --target x86_64-apple-darwin
         cargo build --release --target i686-unknown-linux-gnu
-        cargo build --release --target i686-pc-windows-msvc
+        cargo build --release --target i686-pc-windows-gnu
         cargo build --release --target aarch64-unknown-linux-gnu
         cargo build --release --target aarch64-apple-darwin
-        cargo build --release --target aarch64-pc-windows-msvc
         cargo build --release --target riscv64gc-unknown-linux-gnu
 
     - name: Run tests in release mode
@@ -60,11 +58,11 @@ jobs:
         name: release
         path: |
           target/x86_64-unknown-linux-gnu/release/polish-cow
-          target/x86_64-pc-windows-msvc/release/polish-cow.exe
+          target/x86_64-pc-windows-gnu/release/polish-cow.exe
           target/x86_64-apple-darwin/release/polish-cow
           target/i686-unknown-linux-gnu/release/polish-cow
-          target/i686-pc-windows-msvc/release/polish-cow.exe
+          target/i686-pc-windows-gnu/release/polish-cow.exe
           target/aarch64-unknown-linux-gnu/release/polish-cow
           target/aarch64-apple-darwin/release/polish-cow
-          target/aarch64-pc-windows-msvc/release/polish-cow.exe
+          target/aarch64-pc-windows-gnu/release/polish-cow.exe
           target/riscv64gc-unknown-linux-gnu/release/polish-cow
