@@ -21,6 +21,10 @@ jobs:
       run: |
         apt-get update
         apt-get -y install libasound2-dev mingw-w64 libclang-dev
+        # Debug pkg-config for alsa
+        pkg-config --libs --cflags alsa || true
+        find /usr -name alsa.pc -print || true
+        echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
 
     - name: Setup cross-compilation environment for i686-unknown-linux-gnu
       run: |
@@ -90,7 +94,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Install rustup
-      run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+      run: brew install rustup
 
     - name: Build production release for macOS
       run: |
