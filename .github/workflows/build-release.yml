@@ -22,6 +22,14 @@ jobs:
         apt-get update
         apt-get -y install libasound2-dev mingw-w64 libclang-dev
 
+    - name: Setup cross-compilation environment for i686-unknown-linux-gnu
+      run: |
+        # Assuming the use of default paths and standard libraries that do not strictly require a separate sysroot
+        # This is a simplified setup and might need adjustments for more complex dependencies
+        echo "PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig:/usr/share/pkgconfig" >> $GITHUB_ENV
+        echo "PKG_CONFIG_LIBDIR=/usr/lib/i386-linux-gnu/pkgconfig:/usr/share/pkgconfig" >> $GITHUB_ENV
+        echo "PKG_CONFIG_ALLOW_CROSS=1" >> $GITHUB_ENV
+
     - name: Build production release for linux and windows
       run: |
         echo "Adding supported targets to the rustup toolchain"
@@ -77,10 +85,12 @@ jobs:
 
   build-and-release-macos:
     runs-on: macos-latest
-    container: rust:1.76
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: Install rustup
+      run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
     - name: Build production release for macOS
       run: |
