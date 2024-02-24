@@ -10,7 +10,7 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build-and-release:
+  build-and-release-linux-and-windows:
     runs-on: ubuntu-latest
     container: rust:1.76
 
@@ -22,7 +22,7 @@ jobs:
         apt-get update
         apt-get -y install libasound2-dev mingw-w64 libclang-dev
 
-    - name: Build production release for various platforms
+    - name: Build production release for linux and windows
       run: |
         echo "Adding supported targets to the rustup toolchain"
         # x86 64bit architectures
@@ -30,8 +30,6 @@ jobs:
         rustup target add x86_64-unknown-linux-gnu
         echo "Adding target x86_64-pc-windows-gnu"
         rustup target add x86_64-pc-windows-gnu
-        echo "Adding target x86_64-apple-darwin"
-        rustup target add x86_64-apple-darwin
         
         # x86 32bit architectures
         echo "Adding target i686-unknown-linux-gnu"
@@ -42,8 +40,6 @@ jobs:
         # ARM 64bit architectures
         echo "Adding target aarch64-unknown-linux-gnu"
         rustup target add aarch64-unknown-linux-gnu
-        echo "Adding target aarch64-apple-darwin"
-        rustup target add aarch64-apple-darwin
 
         # RISC-V 64bit architectures
         echo "Adding target riscv64gc-unknown-linux-gnu"
@@ -54,16 +50,12 @@ jobs:
         cargo build --release --target x86_64-unknown-linux-gnu
         echo "Building the release for x86_64-pc-windows-gnu"
         cargo build --release --target x86_64-pc-windows-gnu
-        echo "Building the release for x86_64-apple-darwin"
-        cargo build --release --target x86_64-apple-darwin
         echo "Building the release for i686-unknown-linux-gnu"
         cargo build --release --target i686-unknown-linux-gnu
         echo "Building the release for i686-pc-windows-gnu"
         cargo build --release --target i686-pc-windows-gnu
         echo "Building the release for aarch64-unknown-linux-gnu"
         cargo build --release --target aarch64-unknown-linux-gnu
-        echo "Building the release for aarch64-apple-darwin"
-        cargo build --release --target aarch64-apple-darwin
         echo "Building the release for riscv64gc-unknown-linux-gnu"
         cargo build --release --target riscv64gc-unknown-linux-gnu
 
@@ -78,9 +70,40 @@ jobs:
         path: |
           target/x86_64-unknown-linux-gnu/release/polish-cow
           target/x86_64-pc-windows-gnu/release/polish-cow.exe
-          target/x86_64-apple-darwin/release/polish-cow
           target/i686-unknown-linux-gnu/release/polish-cow
           target/i686-pc-windows-gnu/release/polish-cow.exe
           target/aarch64-unknown-linux-gnu/release/polish-cow
-          target/aarch64-apple-darwin/release/polish-cow
           target/riscv64gc-unknown-linux-gnu/release/polish-cow
+
+  build-and-release-macos:
+    runs-on: macos-latest
+    container: rust:1.76
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build production release for macOS
+      run: |
+        echo "Adding supported targets to the rustup toolchain"
+        # x86 64bit architectures
+        echo "Adding target x86_64-apple-darwin"
+        rustup target add x86_64-apple-darwin
+        
+        # ARM 64bit architectures
+        echo "Adding target aarch64-apple-darwin"
+        rustup target add aarch64-apple-darwin
+
+        # Build the release
+        echo "Building the release for x86_64-apple-darwin"
+        cargo build --release --target x86_64-apple-darwin
+        echo "Building the release for aarch64-unknown-linux-gnu"
+        cargo build --release --target aarch64
+
+    # upload artifacts
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: release
+        path: |
+          target/x86_64-apple-darwin/release/polish-cow
+          target/aarch64-apple-darwin/release/polish-cow
