@@ -20,11 +20,7 @@ jobs:
     - name: Install necessary libraries
       run: |
         apt-get update
-        apt-get -y install libasound2-dev mingw-w64 libclang-dev
-        # Debug pkg-config for alsa
-        pkg-config --libs --cflags alsa || true
-        find /usr -name alsa.pc -print || true
-        echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
+        apt-get -y install libasound2-dev mingw-w64 libclang-dev alsa alsa-dev alsa-devel
 
     - name: Setup cross-compilation environment for i686-unknown-linux-gnu
       run: |
@@ -94,7 +90,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Install rustup
-      run: brew install rustup
+      run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
     - name: Build production release for macOS
       run: |
@@ -110,8 +106,8 @@ jobs:
         # Build the release
         echo "Building the release for x86_64-apple-darwin"
         cargo build --release --target x86_64-apple-darwin
-        echo "Building the release for aarch64-unknown-linux-gnu"
-        cargo build --release --target aarch64
+        echo "Building the release for aarch64-apple-darwin"
+        cargo build --release --target aarch64-apple-darwin
 
     # upload artifacts
     - name: Upload artifacts
