@@ -17,6 +17,13 @@ jobs:
 
     - name: Install necessary libraries
       run: |
+        # Add foreign architectures
+        dpkg --add-architecture i386
+        dpkg --add-architecture arm64
+        dpkg --add-architecture armhf
+        dpkg --add-architecture riscv64
+
+        # Update the package lists
         apt-get update
         apt-get -y install mingw-w64 libclang-dev libasound2-dev libasound2-dev:amd64 libasound2-dev:i386 libasound2-dev:arm64 libasound2-dev:armhf libasound2-dev:riscv64
 
