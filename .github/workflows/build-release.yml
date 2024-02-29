@@ -18,8 +18,7 @@ jobs:
     - name: Install necessary libraries
       run: |
         apt-get update
-        apt-get -y install libasound2-dev mingw-w64 libclang-dev
-      # apt-get -y install libasound2-dev mingw-w64 libclang-dev librust-alsa-sys-dev
+        apt-get -y install mingw-w64 libclang-dev libasound2-dev libasound2-dev:amd64 libasound2-dev:i386 libasound2-dev:arm64 libasound2-dev:armhf libasound2-dev:riscv64
 
     - name: Build production release for linux and windows
       run: |
@@ -31,12 +30,18 @@ jobs:
         rustup target add x86_64-pc-windows-gnu
         
         # x86 32bit architectures
+        echo "Adding target i686-unknown-linux-gnu"
+        rustup target add i686-unknown-linux-gnu
         echo "Adding target i686-pc-windows-gnu"
         rustup target add i686-pc-windows-gnu
         
         # ARM 64bit architectures
         echo "Adding target aarch64-unknown-linux-gnu"
         rustup target add aarch64-unknown-linux-gnu
+
+        # ARM 32bit architectures
+        echo "Adding target armv7-unknown-linux-gnueabihf"
+        rustup target add armv7-unknown-linux-gnueabihf
 
         # RISC-V 64bit architectures
         echo "Adding target riscv64gc-unknown-linux-gnu"
@@ -47,10 +52,14 @@ jobs:
         cargo build --release --target x86_64-unknown-linux-gnu
         echo "Building the release for x86_64-pc-windows-gnu"
         cargo build --release --target x86_64-pc-windows-gnu
+        echo "Building the release for i686-unknown-linux-gnu"
+        cargo build --release --target i686-unknown-linux-gnu
         echo "Building the release for i686-pc-windows-gnu"
         cargo build --release --target i686-pc-windows-gnu
         echo "Building the release for aarch64-unknown-linux-gnu"
         cargo build --release --target aarch64-unknown-linux-gnu
+        echo "Building the release for armv7-unknown-linux-gnueabihf"
+        cargo build --release --target armv7-unknown-linux-gnueabihf
         echo "Building the release for riscv64gc-unknown-linux-gnu"
         cargo build --release --target riscv64gc-unknown-linux-gnu
 
@@ -65,38 +74,11 @@ jobs:
         path: |
           target/x86_64-unknown-linux-gnu/release/polish-cow
           target/x86_64-pc-windows-gnu/release/polish-cow.exe
+          target/i686-unknown-linux-gnu/release/polish-cow
           target/i686-pc-windows-gnu/release/polish-cow.exe
           target/aarch64-unknown-linux-gnu/release/polish-cow
+          target/armv7-unknown-linux-gnueabihf/release/polish-cow
           target/riscv64gc-unknown-linux-gnu/release/polish-cow
-
-  build-and-release-linux-i686:
-    runs-on: ubuntu-latest
-    container: rustembedded/cross:i686-unknown-linux-gnu
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Install rustup
-      run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-
-    - name: Install necessary libraries
-      run: |
-        apt-get update
-        apt-get -y install libasound2-dev
-
-    - name: Build production release for linux
-      run: |
-        echo "Adding target i686-unknown-linux-gnu"
-        rustup target add i686-unknown-linux-gnu
-        echo "Building the release for i686-unknown-linux-gnu"
-        cargo build --release --target i686-unknown-linux-gnu
-
-    # upload artifacts
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: release
-        path: target/i686-unknown-linux-gnu/release/polish-cow
 
   build-and-release-macos:
     runs-on: macos-latest
