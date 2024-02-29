@@ -18,7 +18,7 @@ jobs:
     - name: Install necessary libraries
       run: |
         apt-get update
-        apt-get -y install libasound2-dev
+        apt-get -y install libasound2-dev mingw-w64 libclang-dev
       # apt-get -y install libasound2-dev mingw-w64 libclang-dev librust-alsa-sys-dev
 
     - name: Build production release for linux and windows
@@ -75,6 +75,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: Install rustup
+      run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
     - name: Install necessary libraries
       run: |
