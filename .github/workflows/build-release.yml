@@ -35,8 +35,8 @@ jobs:
       run: |
         echo "Adding supported targets to the rustup toolchain"
         # x86 64bit architectures
-        echo "Adding target x86_64-unknown-linux-gnu"
-        rustup target add x86_64-unknown-linux-gnu
+        echo "Adding target x86_64-unknown-linux-musl"
+        rustup target add x86_64-unknown-linux-musl
         echo "Adding target x86_64-pc-windows-gnu"
         rustup target add x86_64-pc-windows-gnu
         
@@ -47,8 +47,8 @@ jobs:
         rustup target add i686-pc-windows-gnu
         
         # ARM 64bit architectures
-        # echo "Adding target aarch64-unknown-linux-gnu"
-        # rustup target add aarch64-unknown-linux-gnu
+        echo "Adding target aarch64-unknown-linux-musl"
+        rustup target add aarch64-unknown-linux-musl
 
         # ARM 32bit architectures
         # echo "Adding target armv7-unknown-linux-gnueabihf"
@@ -59,16 +59,16 @@ jobs:
         # rustup target add riscv64gc-unknown-linux-gnu
 
         # Build the release
-        echo "Building the release for x86_64-unknown-linux-gnu"
-        cargo build --release --target x86_64-unknown-linux-gnu
+        echo "Building the release for x86_64-unknown-linux-musl"
+        cargo build --release --target x86_64-unknown-linux-musl
         echo "Building the release for x86_64-pc-windows-gnu"
         cargo build --release --target x86_64-pc-windows-gnu
         # echo "Building the release for i686-unknown-linux-gnu"
         # cargo build --release --target i686-unknown-linux-gnu
         echo "Building the release for i686-pc-windows-gnu"
         cargo build --release --target i686-pc-windows-gnu
-        # echo "Building the release for aarch64-unknown-linux-gnu"
-        # cargo build --release --target aarch64-unknown-linux-gnu
+        echo "Building the release for aarch64-unknown-linux-musl"
+        cargo build --release --target aarch64-unknown-linux-musl
         # echo "Building the release for armv7-unknown-linux-gnueabihf"
         # cargo build --release --target armv7-unknown-linux-gnueabihf
         # echo "Building the release for riscv64gc-unknown-linux-gnu"
@@ -83,10 +83,10 @@ jobs:
       with:
         name: release
         path: |
-          target/x86_64-unknown-linux-gnu/release/polish-cow
+          target/x86_64-unknown-linux-musl/release/polish-cow
           target/x86_64-pc-windows-gnu/release/polish-cow.exe
           target/i686-pc-windows-gnu/release/polish-cow.exe
-          target/aarch64-unknown-linux-gnu/release/polish-cow
+          target/aarch64-unknown-linux-musl/release/polish-cow
           target/armv7-unknown-linux-gnueabihf/release/polish-cow
           target/riscv64gc-unknown-linux-gnu/release/polish-cow
         # target/i686-unknown-linux-gnu/release/polish-cow
