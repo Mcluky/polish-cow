@@ -25,7 +25,8 @@ jobs:
 
         # Update the package lists
         apt-get update
-        apt-get -y install mingw-w64 libclang-dev libasound2-dev libasound2-dev:amd64 libasound2-dev:i386 libasound2-dev:arm64 libasound2-dev:armhf libasound2-dev:riscv64
+        apt-get -y install mingw-w64 libclang-dev libasound2-dev libasound2-dev:amd64 libasound2-dev:i386 libasound2-dev:arm64 libasound2-dev:armhf
+        # apt-get -y install mingw-w64 libclang-dev libasound2-dev libasound2-dev:amd64 libasound2-dev:i386 libasound2-dev:arm64 libasound2-dev:armhf libasound2-dev:riscv64
 
     - name: Build production release for linux and windows
       run: |
