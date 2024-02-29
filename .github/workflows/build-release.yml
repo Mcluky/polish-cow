@@ -40,8 +40,8 @@ jobs:
         rustup target add x86_64-pc-windows-gnu
         
         # x86 32bit architectures
-        echo "Adding target i686-unknown-linux-gnu"
-        rustup target add i686-unknown-linux-gnu
+        # echo "Adding target i686-unknown-linux-gnu"
+        # rustup target add i686-unknown-linux-gnu
         echo "Adding target i686-pc-windows-gnu"
         rustup target add i686-pc-windows-gnu
         
@@ -62,8 +62,8 @@ jobs:
         cargo build --release --target x86_64-unknown-linux-gnu
         echo "Building the release for x86_64-pc-windows-gnu"
         cargo build --release --target x86_64-pc-windows-gnu
-        echo "Building the release for i686-unknown-linux-gnu"
-        cargo build --release --target i686-unknown-linux-gnu
+        # echo "Building the release for i686-unknown-linux-gnu"
+        # cargo build --release --target i686-unknown-linux-gnu
         echo "Building the release for i686-pc-windows-gnu"
         cargo build --release --target i686-pc-windows-gnu
         echo "Building the release for aarch64-unknown-linux-gnu"
@@ -84,43 +84,43 @@ jobs:
         path: |
           target/x86_64-unknown-linux-gnu/release/polish-cow
           target/x86_64-pc-windows-gnu/release/polish-cow.exe
-          target/i686-unknown-linux-gnu/release/polish-cow
           target/i686-pc-windows-gnu/release/polish-cow.exe
           target/aarch64-unknown-linux-gnu/release/polish-cow
           target/armv7-unknown-linux-gnueabihf/release/polish-cow
           target/riscv64gc-unknown-linux-gnu/release/polish-cow
+        # target/i686-unknown-linux-gnu/release/polish-cow
 
-  build-and-release-macos:
-    runs-on: macos-latest
+  # build-and-release-macos:
+  #   runs-on: macos-latest
 
-    steps:
-    - uses: actions/checkout@v3
+  #   steps:
+  #   - uses: actions/checkout@v3
 
-    - name: Install rustup
-      run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+  #   - name: Install rustup
+  #     run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
-    - name: Build production release for macOS
-      run: |
-        echo "Adding supported targets to the rustup toolchain"
-        # x86 64bit architectures
-        echo "Adding target x86_64-apple-darwin"
-        rustup target add x86_64-apple-darwin
+  #   - name: Build production release for macOS
+  #     run: |
+  #       echo "Adding supported targets to the rustup toolchain"
+  #       # x86 64bit architectures
+  #       echo "Adding target x86_64-apple-darwin"
+  #       rustup target add x86_64-apple-darwin
         
-        # ARM 64bit architectures
-        echo "Adding target aarch64-apple-darwin"
-        rustup target add aarch64-apple-darwin
+  #       # ARM 64bit architectures
+  #       echo "Adding target aarch64-apple-darwin"
+  #       rustup target add aarch64-apple-darwin
 
-        # Build the release
-        echo "Building the release for x86_64-apple-darwin"
-        cargo build --release --target x86_64-apple-darwin
-        echo "Building the release for aarch64-apple-darwin"
-        cargo build --release --target aarch64-apple-darwin
+  #       # Build the release
+  #       echo "Building the release for x86_64-apple-darwin"
+  #       cargo build --release --target x86_64-apple-darwin
+  #       echo "Building the release for aarch64-apple-darwin"
+  #       cargo build --release --target aarch64-apple-darwin
 
-    # upload artifacts
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: release
-        path: |
-          target/x86_64-apple-darwin/release/polish-cow
-          target/aarch64-apple-darwin/release/polish-cow
+  #   # upload artifacts
+  #   - name: Upload artifacts
+  #     uses: actions/upload-artifact@v4
+  #     with:
+  #       name: release
+  #       path: |
+  #         target/x86_64-apple-darwin/release/polish-cow
+  #         target/aarch64-apple-darwin/release/polish-cow
